@@ -54,35 +54,38 @@ const fzi::top_uav::Solution& fzi::top_uav::Trajectory_Planner::calc_opt_time(co
             }
 
             // check if trajectory can be synchronized with t_opt = t_sota
-            bool b_synchronization_possible = true;
-            b_synchronization_possible &= synchronization_possible(t_opt, x_s, x_e, v_xs, v_xe, v_min_x, v_max_x, a_min_x, a_max_x, 'x');
-            b_synchronization_possible &= synchronization_possible(t_opt, y_s, y_e, v_ys, v_ye, v_min_y, v_max_y, a_min_y, a_max_y, 'y');
-            b_synchronization_possible &= synchronization_possible(t_opt, z_s, z_e, v_zs, v_ze, v_min_z, v_max_z, a_min_z, a_max_z, 'z');
+            if (t_opt < t_opt_best) {
+                bool b_synchronization_possible = true;
+                b_synchronization_possible &= synchronization_possible(t_opt, x_s, x_e, v_xs, v_xe, v_min_x, v_max_x, a_min_x, a_max_x, 'x');
+                b_synchronization_possible &= synchronization_possible(t_opt, y_s, y_e, v_ys, v_ye, v_min_y, v_max_y, a_min_y, a_max_y, 'y');
+                b_synchronization_possible &= synchronization_possible(t_opt, z_s, z_e, v_zs, v_ze, v_min_z, v_max_z, a_min_z, a_max_z, 'z');
 
-            if (b_synchronization_possible) {
-                if (t_opt < t_opt_best) {
-                    t_opt_best = t_opt;
-                    best_solution.copy(solution);
-                    best_solution.set_time_optimal_trajectory_duration(t_opt_best);
+                if (b_synchronization_possible) {
+                        t_opt_best = t_opt;
+                        best_solution.copy(solution);
+                        best_solution.set_time_optimal_trajectory_duration(t_opt_best);
                 }
-            }
-            else {
-                std::vector<double> t_sync_cand_sorted = determine_candidate_times(t_opt, x_s, x_e, y_s, y_e, z_s, z_e, v_xs, v_xe, v_ys, v_ye, v_zs, v_ze, config);
-                for (const auto& elem : t_sync_cand_sorted) {
-                    b_synchronization_possible = true;
-                    b_synchronization_possible &= synchronization_possible(elem, x_s, x_e, v_xs, v_xe, v_min_x, v_max_x, a_min_x, a_max_x, 'x');
-                    b_synchronization_possible &= synchronization_possible(elem, y_s, y_e, v_ys, v_ye, v_min_y, v_max_y, a_min_y, a_max_y, 'y');
-                    b_synchronization_possible &= synchronization_possible(elem, z_s, z_e, v_zs, v_ze, v_min_z, v_max_z, a_min_z, a_max_z, 'z');
-                    if (b_synchronization_possible) {
+                else {
+                    std::vector<double> t_sync_cand_sorted = determine_candidate_times(t_opt, x_s, x_e, y_s, y_e, z_s, z_e, v_xs, v_xe, v_ys, v_ye, v_zs, v_ze, config);
+                    for (const auto& elem : t_sync_cand_sorted) {
                         if (elem < t_opt_best) {
-                            t_opt_best = elem;
-                            best_solution.copy(solution);
-                            best_solution.set_time_optimal_trajectory_duration(t_opt_best);
-                            break;
+                            b_synchronization_possible = true;
+                            b_synchronization_possible &= synchronization_possible(elem, x_s, x_e, v_xs, v_xe, v_min_x, v_max_x, a_min_x, a_max_x, 'x');
+                            b_synchronization_possible &= synchronization_possible(elem, y_s, y_e, v_ys, v_ye, v_min_y, v_max_y, a_min_y, a_max_y, 'y');
+                            b_synchronization_possible &= synchronization_possible(elem, z_s, z_e, v_zs, v_ze, v_min_z, v_max_z, a_min_z, a_max_z, 'z');
+                            if (b_synchronization_possible) {
+
+                                    t_opt_best = elem;
+                                    best_solution.copy(solution);
+                                    best_solution.set_time_optimal_trajectory_duration(t_opt_best);
+                                    break;
+                            }
                         }
                     }
                 }
+
             }
+
         }
     }
     return best_solution;
