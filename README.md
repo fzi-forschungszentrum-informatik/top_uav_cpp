@@ -27,7 +27,7 @@ If you use top_uav_cpp in your research, please consider citing our original pap
 ```
 @INPROCEEDINGS{Meyer.2023,
 	author={Meyer, Fabian and Glock, Katharina and Sayah, David}, 
-  booktitle={2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
+  	booktitle={2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}, 
 	year={2023},
 	title={TOP-UAV: Open-Source Time-optimal Trajectory Planner for Point-Masses under Acceleration and Velocity Constraints},
 	volume={},
