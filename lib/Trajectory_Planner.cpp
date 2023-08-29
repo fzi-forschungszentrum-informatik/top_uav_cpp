@@ -3,6 +3,7 @@
 //
 
 #include "Trajectory_Planner.h"
+#include <limits>
 
 
 fzi::top_uav::Trajectory_Planner::Trajectory_Planner(double v_max, double a_max, std::string version)
@@ -26,7 +27,7 @@ fzi::top_uav::Trajectory_Planner::Trajectory_Planner(double v_max, double a_max,
 
 const fzi::top_uav::Solution& fzi::top_uav::Trajectory_Planner::calc_opt_time(const double& x_s, const double& x_e, const double& y_s, const double& y_e, const double& z_s, const double& z_e, const double& v_xs, const double& v_xe, const double& v_ys, const double& v_ye, const double& v_zs, const double& v_ze)
 {
-    double t_opt_best = DBL_MAX;
+    double t_opt_best = std::numeric_limits<double>::max();
     for (const auto& config : configs) {
         if (check_inputs(v_xs, v_xe, v_ys, v_ye, v_zs, v_ze, config)) {
             const double& v_max_x = config.get_v_max_x();
@@ -316,8 +317,8 @@ void fzi::top_uav::Trajectory_Planner::sync_pattern1(const double& p_s, const do
     }
 
     else {
-        candidates.push_back(-DBL_MAX);
-        candidates.push_back(-DBL_MAX);
+        candidates.push_back(std::numeric_limits<double>::min());
+        candidates.push_back(std::numeric_limits<double>::min());
     }
 
     // zero of equation t3(te) == 0
@@ -360,8 +361,8 @@ void fzi::top_uav::Trajectory_Planner::sync_pattern2(const double& p_s, const do
         candidates.push_back((-v_e - v_s) / a);
     }
     else {
-        candidates.push_back(-DBL_MAX);
-        candidates.push_back(-DBL_MAX);
+        candidates.push_back(std::numeric_limits<double>::min());
+        candidates.push_back(std::numeric_limits<double>::min());
     }
 
     // zero of equation t3(te) == 0
