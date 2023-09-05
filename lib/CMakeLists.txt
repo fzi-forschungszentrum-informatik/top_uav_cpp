@@ -17,3 +17,5 @@ add_library(lib
         utils.h)
 
 target_include_directories(lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+add_catch2_test_executable(tests SOURCES tests.cpp DEPENDS lib)

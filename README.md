@@ -3,16 +3,30 @@ top_uav_cpp is a C++ tool to generate 3-dimensional time-optimal trajectories fr
 
 To access the Python implementation see [top_uav_py](https://github.com/fzi-forschungszentrum-informatik/top_uav_py).
 
-## 💈 Installation
+## 💈 Build
 ```shell
-mkdir "build"
+mkdir build
 cd build
-cmake ..
+cmake ../
+cmake --build . --target top_uav_cpp
 ```
 
 
 ## 🍫 Quickstart
 The example in main.cpp generates time-optimal trajectories according to the state-of-the-art method as well as of our basic generally valid version as well as our version with improved exploitation of kinematic properties.
+
+
+## ✅ Build and run tests
+```shell
+# in build directory
+cmake --build . --target all_tests
+ctest
+```
+
+
+## 🚀 Benchmarks
+
+Use `Release` configuration. Then build the `benchmarks` target and run the executable.
 
 
 ## 🏫 Affiliations
